@@ -5,6 +5,9 @@ const hexColors = document.querySelectorAll(".color h2");
 let initialColors;
 
 //EVENT LISTENERS
+generateBtn.addEventListener("click", () => {
+  randomizePalette();
+});
 
 //FUNCTIONS
 
