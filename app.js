@@ -7,6 +7,7 @@ const adjustBtns = document.querySelectorAll(".adjust");
 const lockBtns = document.querySelectorAll(".lock");
 const closeAdjustBtns = document.querySelectorAll(".close-adjustment");
 const slidersDivs = document.querySelectorAll(".sliders");
+const copyContainer = document.querySelector(".copy-container");
 
 let initialColors;
 
@@ -42,6 +43,13 @@ lockBtns.forEach((btn, index) => {
     toggleLock(index);
   });
 });
+
+hexColors.forEach((color) => {
+  color.addEventListener("click", () => {
+    copyToClipboard(color);
+  });
+});
+
 //FUNCTIONS
 
 //Hex color generator
@@ -197,5 +205,31 @@ function toggleLock(index) {
   lockBtns[index].firstChild.classList.toggle("fa-lock-open");
   lockBtns[index].firstChild.classList.toggle("fa-lock");
 }
+
+function copyToClipboard(hexColor) {
+  //copies the current hexColor h2 text
+  navigator.clipboard.writeText(hexColor.innerText);
+
+  //Show copy popup modal
+  const popupBox = copyContainer.children[0];
+  const popupHeader = popupBox.children[0];
+  const copiedHexColor = popupBox.children[1];
+  copiedHexColor.innerText = `${hexColor.innerText}`;
+  checkContrast(hexColor.innerText, popupHeader);
+  checkContrast(hexColor.innerText, copiedHexColor);
+
+  copyContainer.classList.toggle("active");
+  popupBox.classList.add("active");
+  popupBox.style.backgroundColor = `${hexColor.innerText}`;
+  setTimeout(hidePopup, 1500);
+}
+
+//Reset copy popup modal
+function hidePopup() {
+  const popupBox = copyContainer.children[0];
+  copyContainer.classList.remove("active");
+  popupBox.classList.remove("active");
+}
+
 //Calling the function sets the initial palette
 randomizePalette();
