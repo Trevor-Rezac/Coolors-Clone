@@ -68,7 +68,8 @@ path, i, svg {
   transform: translateY(0px);
   pointer-events: all;
 }
-.sliders button {
+.sliders button,
+.close-save {
   position: absolute;
   top: 0;
   right: 0;
@@ -119,7 +120,8 @@ input[type='range'] {
   align-items: center;
 }
 
-.copy-container {
+.copy-container,
+.save-container {
   position: fixed;
   top: 0%;
   left: 0%;
@@ -134,7 +136,8 @@ input[type='range'] {
   pointer-events: none;
 }
 
-.copy-popup {
+.copy-popup,
+.save-popup {
   background: white;
   display: flex;
   flex-direction: column;
@@ -147,20 +150,48 @@ input[type='range'] {
   min-height: 30vh;
 }
 
-.copy-popup h4 {
+.copy-popup h4,
+.save-popup h4 {
   font-size: 2rem;
   padding: 1rem;
 }
 
-.copy-container.active {
+.copy-container.active,
+.save-container.active {
   opacity: 1;
   pointer-events: all;
 }
 
-.copy-popup.active {
+.copy-popup.active,
+.save-popup.active {
   transform: translateY(0rem)
 }
 
-.library-container, .save-container {
+.submit-save {
+  -webkit-appearance: none;
+  border: none;
+  border-radius: 5px;
+  padding: .5rem;
+  min-width: .5rem;
+  cursor: pointer;
+  font-size: 12px; 
+  line-height: 12px; 
+  padding: 5px; 
+  border-radius: 5px; 
+  font-weight: normal; 
+  text-decoration: none; 
+  font-style: normal; 
+  font-variant: normal; 
+  text-transform: none; 
+  box-shadow: rgb(0, 0, 0) 1px 1px 3px 1px; 
+  display: inline-block;}
+.submit-save:hover {
+  background: lightgray; 
+}
+.submit-save:active {
+  background: darkgray; 
+}
+
+.library-container {
   display: none;
 }

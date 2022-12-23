@@ -231,5 +231,26 @@ function hidePopup() {
   popupBox.classList.remove("active");
 }
 
+//THE BELOW SECTION IS FOR IMPLEMENTING THE SAVE PALETTE FEATURE
+const saveBtn = document.querySelector(".save");
+const submitSave = document.querySelector(".submit-save");
+const closeSaveBtn = document.querySelector(".close-save");
+const saveContainer = document.querySelector(".save-container");
+const saveInput = document.querySelector(".save-popup input");
+
+saveBtn.addEventListener("click", openSavePalette);
+closeSaveBtn.addEventListener("click", closeSavePalette);
+
+function openSavePalette(e) {
+  const popup = saveContainer.children[0];
+  saveContainer.classList.add("active");
+  popup.classList.add("active");
+}
+
+function closeSavePalette(e) {
+  const popup = saveContainer.children[0];
+  saveContainer.classList.remove("active");
+  popup.classList.remove("active");
+}
 //Calling the function sets the initial palette
 randomizePalette();
