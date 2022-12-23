@@ -2,7 +2,10 @@
 const generateBtn = document.querySelector(".generate");
 const colors = document.querySelectorAll(".color");
 const hexColors = document.querySelectorAll(".color h2");
-const sliders = document.querySelectorAll(".sliders");
+const sliders = document.querySelectorAll("input[type='range']");
+const adjustBtns = document.querySelectorAll(".adjust");
+const closeAdjustBtns = document.querySelectorAll(".close-adjustment");
+const slidersDivs = document.querySelectorAll(".sliders");
 
 let initialColors;
 
@@ -20,6 +23,19 @@ colors.forEach((div, index) => {
     updateHexText(index);
   });
 });
+
+adjustBtns.forEach((btn, index) => {
+  btn.addEventListener("click", () => {
+    toggleAdjustmentPanel(index);
+  });
+});
+
+closeAdjustBtns.forEach((btn, index) => {
+  btn.addEventListener("click", () => {
+    toggleAdjustmentPanel(index);
+  });
+});
+
 //FUNCTIONS
 
 //Hex color generator
@@ -35,6 +51,7 @@ function randomizePalette() {
   colors.forEach((div, index) => {
     const hexText = div.children[0];
     const randomHexColor = generateHexColor();
+    const icons = div.children[1].getElementsByTagName("button");
     //add the color to the initial color array
     initialColors.push(chroma(randomHexColor).hex());
 
@@ -42,6 +59,15 @@ function randomizePalette() {
     hexText.innerText = randomHexColor;
 
     checkContrast(randomHexColor, hexText);
+
+    for (icon of icons) {
+      if (hexText.style.color === "white") {
+        icon.style.color = "white";
+      }
+      if (hexText.style.color === "black") {
+        icon.style.color = "black";
+      }
+    }
 
     //Set color sliders
     const color = chroma(randomHexColor);
@@ -148,6 +174,10 @@ function resetInputs() {
       slider.value = Math.floor(saturationValue * 100) / 100;
     }
   });
+}
+
+function toggleAdjustmentPanel(index) {
+  slidersDivs[index].classList.toggle("active");
 }
 
 //Calling the function sets the initial palette

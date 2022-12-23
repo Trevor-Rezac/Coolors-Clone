@@ -58,12 +58,12 @@ path, i, svg {
   color: darkslategray;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  /* opacity: 0; */
-  /* pointer-events: none; */
-  /* transform: translateY(100px); */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(100px);
   transition: all .3s ease-in-out;
 }
-.sliders:active {
+.sliders.active {
   opacity: 1;
   transform: translateY(0px);
   pointer-events: all;
