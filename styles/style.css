@@ -1,0 +1,166 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto Slab', serif;
+}
+
+path, i, svg {
+  pointer-events: none;
+}
+
+.colors {
+  min-height: 80vh;
+  display: flex;
+  color: rgb(212, 212, 212);
+}
+
+.color {
+  height: 80vh;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  position: relative;
+}
+
+.color h2 {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem;
+}
+.adjust,
+.lock {
+  font-size: 2rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin: 1rem 0rem;
+}
+
+.sliders {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0%;
+  padding: 1rem;
+  width: 80%;
+  background: rgb(211, 211, 211, .8);
+  color: darkslategray;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(100px);
+  transition: all .3s ease-in-out;
+}
+.sliders.active {
+  opacity: 1;
+  transform: translateY(0px);
+  pointer-events: all;
+}
+.sliders button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: .5rem;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: none;
+  background: darkgrey;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Slider input styling */
+input[type='range'] {
+  -webkit-appearance: none;
+  margin: 1rem 0rem;
+  width: 100%;
+  position: relative;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 20vh;
+}
+.panel button {
+  font-size: 1.2rem;
+  margin: .5rem;
+  padding: .5rem 1rem;
+  background-color: darkcyan;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.panel p {
+  font-size: 1.2rem;
+}
+
+.library-panel,
+.generate-panel,
+.save-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.copy-container {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  background: rgba(0, 0, 0, .5);
+  width: 100%;
+  height: 100%;
+  transition: all .3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.copy-popup {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 5px;
+  transition: transform .3s ease-in-out;
+  transform: translateY(-2rem);
+  min-width: 30%;
+  min-height: 30vh;
+}
+
+.copy-popup h4 {
+  font-size: 2rem;
+  padding: 1rem;
+}
+
+.copy-container.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.copy-popup.active {
+  transform: translateY(0rem)
+}
+
+.library-container, .save-container {
+  display: none;
+}
