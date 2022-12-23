@@ -54,13 +54,13 @@ path, i, svg {
   bottom: 0%;
   padding: 1rem;
   width: 80%;
-  opacity: 0;
-  background: lightgrey;
+  background: rgb(211, 211, 211, .8);
   color: darkslategray;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  pointer-events: none;
-  transform: translateY(100px);
+  /* opacity: 0; */
+  /* pointer-events: none; */
+  /* transform: translateY(100px); */
   transition: all .3s ease-in-out;
 }
 .sliders:active {
@@ -76,8 +76,18 @@ path, i, svg {
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   border: none;
-  background: lightsteelblue;
+  background: darkgrey;
   font-weight: bold;
+  cursor: pointer;
+}
+
+/* Slider input styling */
+input[type='range'] {
+  -webkit-appearance: none;
+  margin: 1rem 0rem;
+  width: 100%;
+  position: relative;
+  border-radius: 5px;
   cursor: pointer;
 }
 
