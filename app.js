@@ -15,6 +15,11 @@ sliders.forEach((slider) => {
   slider.addEventListener("input", hslControls);
 });
 
+colors.forEach((div, index) => {
+  div.addEventListener("change", () => {
+    updateHexText(index);
+  });
+});
 //FUNCTIONS
 
 //Hex color generator
@@ -25,9 +30,13 @@ function generateHexColor() {
 
 //Randomize palette
 function randomizePalette() {
+  initialColors = [];
+
   colors.forEach((div, index) => {
     const hexText = div.children[0];
     const randomHexColor = generateHexColor();
+    //add the color to the initial color array
+    initialColors.push(chroma(randomHexColor).hex());
 
     div.style.backgroundColor = randomHexColor;
     hexText.innerText = randomHexColor;
@@ -43,9 +52,10 @@ function randomizePalette() {
 
     colorizeSliders(randomHexColor, hue, brightness, saturation);
   });
+
+  //reset inputs
+  resetInputs();
 }
-//Calling the function sets the initial palette
-randomizePalette();
 
 //Uses chroma.js to check contrast
 //change text to black or white
@@ -60,8 +70,6 @@ function checkContrast(color, text) {
 
 //Colorizes each slider input
 function colorizeSliders(color, hue, brightness, saturation) {
-  //Scale hue
-
   //Scale brightness
   const midBright = color.set("hsl.l", 0.5);
   const scaleBright = chroma.scale(["black", midBright, "white"]);
@@ -91,7 +99,8 @@ function hslControls(e) {
   const brightness = sliders[1];
   const saturation = sliders[2];
 
-  const bgColor = colors[index].querySelector("h2").innerText;
+  //set bgColor to initial color so as not to lose original color when slider updates hex value
+  const bgColor = initialColors[index];
 
   let color = chroma(bgColor)
     .set("hsl.h", hue.value)
@@ -99,4 +108,47 @@ function hslControls(e) {
     .set("hsl.s", saturation.value);
 
   colors[index].style.backgroundColor = color;
+
+  //Re-Colorize the sliders
+  colorizeSliders(color, hue, brightness, saturation);
 }
+
+function updateHexText(index) {
+  const activeColor = colors[index];
+  const color = chroma(activeColor.style.backgroundColor);
+  const hexText = activeColor.querySelector("h2");
+  const icons = activeColor.querySelectorAll(".controls button");
+
+  hexText.innerText = color.hex();
+  checkContrast(color, hexText);
+  for (icon of icons) {
+    checkContrast(color, icon);
+  }
+}
+
+//resets the slider input to the corresponding value
+function resetInputs() {
+  const sliders = document.querySelectorAll(".sliders input");
+  sliders.forEach((slider) => {
+    if (slider.name === "hue") {
+      const hueColor = initialColors[slider.getAttribute("data-hue")];
+      const hueValue = chroma(hueColor).hsl()[0];
+      slider.value = Math.floor(hueValue);
+    }
+    if (slider.name === "brightness") {
+      const brightnessColor =
+        initialColors[slider.getAttribute("data-brightness")];
+      const brightnessValue = chroma(brightnessColor).hsl()[2];
+      slider.value = Math.floor(brightnessValue * 100) / 100;
+    }
+    if (slider.name === "saturation") {
+      const saturationColor =
+        initialColors[slider.getAttribute("data-saturation")];
+      const saturationValue = chroma(saturationColor).hsl()[1];
+      slider.value = Math.floor(saturationValue * 100) / 100;
+    }
+  });
+}
+
+//Calling the function sets the initial palette
+randomizePalette();
