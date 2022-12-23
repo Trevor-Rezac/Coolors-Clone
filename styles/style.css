@@ -160,3 +160,7 @@ input[type='range'] {
 .copy-popup.active {
   transform: translateY(0rem)
 }
+
+.library-container, .save-container {
+  display: none;
+}
