@@ -238,13 +238,18 @@ const closeSaveBtn = document.querySelector(".close-save");
 const saveContainer = document.querySelector(".save-container");
 const saveInput = document.querySelector(".save-popup input");
 
+let savedPalettes = [];
+
 saveBtn.addEventListener("click", openSavePalette);
 closeSaveBtn.addEventListener("click", closeSavePalette);
+submitSave.addEventListener("click", savePalette);
 
 function openSavePalette(e) {
   const popup = saveContainer.children[0];
   saveContainer.classList.add("active");
   popup.classList.add("active");
+  //Set popup background to linear gradient of palette colors
+  popup.style.backgroundImage = `linear-gradient(to right, ${hexColors[0].innerText} 10%, ${hexColors[1].innerText} 30%, ${hexColors[2].innerText} 50%, ${hexColors[3].innerText} 70%, ${hexColors[4].innerText} 90%)`;
 }
 
 function closeSavePalette(e) {
@@ -252,5 +257,41 @@ function closeSavePalette(e) {
   saveContainer.classList.remove("active");
   popup.classList.remove("active");
 }
+
+function savePalette(e) {
+  const paletteName = saveInput.value;
+  const colors = [];
+  hexColors.forEach((hexColor) => {
+    colors.push(hexColor.innerText);
+  });
+
+  //Generate the palette object to be saved
+  //push to saved palettes array
+  let paletteNum = savedPalettes.length;
+  const paletteObj = { paletteName, colors, nr: paletteNum };
+  savedPalettes.push(paletteObj);
+  //Save to local storage
+  saveToLocalStorage(paletteObj);
+  saveInput.value = "";
+  closeSavePalette(e);
+}
+
+function saveToLocalStorage(obj) {
+  let localPalettes;
+
+  //check if LS storage already has palettes, if not
+  //create an empty array
+  if (localStorage.getItem("palettes") === null) {
+    localPalettes = [];
+  } else {
+    //if there are palettes, we parse the LS JSON data
+    localPalettes = JSON.parse(localStorage.getItem("palettes"));
+  }
+
+  //after checking, we are pushing and saving the current palette
+  localPalettes.push(obj);
+  localStorage.setItem("palettes", JSON.stringify(localPalettes));
+}
+
 //Calling the function sets the initial palette
 randomizePalette();
