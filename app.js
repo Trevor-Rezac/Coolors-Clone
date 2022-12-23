@@ -4,6 +4,7 @@ const colors = document.querySelectorAll(".color");
 const hexColors = document.querySelectorAll(".color h2");
 const sliders = document.querySelectorAll("input[type='range']");
 const adjustBtns = document.querySelectorAll(".adjust");
+const lockBtns = document.querySelectorAll(".lock");
 const closeAdjustBtns = document.querySelectorAll(".close-adjustment");
 const slidersDivs = document.querySelectorAll(".sliders");
 
@@ -36,6 +37,11 @@ closeAdjustBtns.forEach((btn, index) => {
   });
 });
 
+lockBtns.forEach((btn, index) => {
+  btn.addEventListener("click", () => {
+    toggleLock(index);
+  });
+});
 //FUNCTIONS
 
 //Hex color generator
@@ -52,8 +58,14 @@ function randomizePalette() {
     const hexText = div.children[0];
     const randomHexColor = generateHexColor();
     const icons = div.children[1].getElementsByTagName("button");
+
     //add the color to the initial color array
-    initialColors.push(chroma(randomHexColor).hex());
+    if (div.classList.contains("locked")) {
+      initialColors.push(hexText.innerText);
+      return;
+    } else {
+      initialColors.push(chroma(randomHexColor).hex());
+    }
 
     div.style.backgroundColor = randomHexColor;
     hexText.innerText = randomHexColor;
@@ -180,5 +192,10 @@ function toggleAdjustmentPanel(index) {
   slidersDivs[index].classList.toggle("active");
 }
 
+function toggleLock(index) {
+  colors[index].classList.toggle("locked");
+  lockBtns[index].firstChild.classList.toggle("fa-lock-open");
+  lockBtns[index].firstChild.classList.toggle("fa-lock");
+}
 //Calling the function sets the initial palette
 randomizePalette();
