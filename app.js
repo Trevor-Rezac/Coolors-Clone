@@ -237,12 +237,18 @@ const submitSave = document.querySelector(".submit-save");
 const closeSaveBtn = document.querySelector(".close-save");
 const saveContainer = document.querySelector(".save-container");
 const saveInput = document.querySelector(".save-popup input");
+const libraryContainer = document.querySelector(".library-container");
+const closeLibraryBtn = document.querySelector(".close-library");
+const libraryBtn = document.querySelector(".library");
 
 let savedPalettes = [];
 
 saveBtn.addEventListener("click", openSavePalette);
 closeSaveBtn.addEventListener("click", closeSavePalette);
 submitSave.addEventListener("click", savePalette);
+
+libraryBtn.addEventListener("click", openLibraryPalette);
+closeLibraryBtn.addEventListener("click", closeLibraryPalette);
 
 function openSavePalette(e) {
   const popup = saveContainer.children[0];
@@ -274,6 +280,9 @@ function savePalette(e) {
   saveToLocalStorage(paletteObj);
   saveInput.value = "";
   closeSavePalette(e);
+
+  const savedPalette = renderSavedPalette(paletteObj);
+  console.log("savedPalette", savedPalette);
 }
 
 function saveToLocalStorage(obj) {
@@ -291,6 +300,53 @@ function saveToLocalStorage(obj) {
   //after checking, we are pushing and saving the current palette
   localPalettes.push(obj);
   localStorage.setItem("palettes", JSON.stringify(localPalettes));
+
+  //append the saved palette to the library
+  const savedPalette = renderSavedPalette(obj);
+  console.log("check", libraryContainer.children);
+  const savedPalettesDiv = document.querySelector(".saved-palettes");
+  savedPalettesDiv.appendChild(savedPalette);
+}
+
+function openLibraryPalette(e) {
+  const popup = libraryContainer.children[0];
+  libraryContainer.classList.add("active");
+  popup.classList.add("active");
+}
+
+function closeLibraryPalette(e) {
+  const popup = libraryContainer.children[0];
+  libraryContainer.classList.remove("active");
+  popup.classList.remove("active");
+}
+
+//this renders a 'preview' of a saved palette
+//this div displays in the library popup
+function renderSavedPalette(obj) {
+  const paletteContainer = document.createElement("div");
+  paletteContainer.classList.add("saved-palette");
+
+  const title = document.createElement("h4");
+  title.innerText = obj.paletteName;
+
+  const preview = document.createElement("div");
+  preview.classList.add("small-preview");
+  obj.colors.forEach((color) => {
+    console.log("color", color);
+    const smallDiv = document.createElement("div");
+    smallDiv.style.backgroundColor = color;
+    preview.appendChild(smallDiv);
+  });
+
+  const selectBtn = document.createElement("button");
+  selectBtn.classList.add("select-palette-btn");
+  selectBtn.innerText = "Select";
+
+  paletteContainer.appendChild(title);
+  paletteContainer.appendChild(preview);
+  paletteContainer.appendChild(selectBtn);
+
+  return paletteContainer;
 }
 
 //Calling the function sets the initial palette
