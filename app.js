@@ -90,7 +90,6 @@ function randomizePalette() {
     }
 
     //Set color sliders
-    const color = chroma(randomHexColor);
     const sliders = div.querySelectorAll(".sliders input");
     const hue = sliders[0];
     const brightness = sliders[1];
@@ -170,6 +169,14 @@ function updateHexText(index) {
   for (icon of icons) {
     checkContrast(color, icon);
   }
+
+  //Re-colorizes the sliders to their corresponding color
+  const sliders = activeColor.querySelectorAll(".sliders input");
+  const hue = sliders[0];
+  const brightness = sliders[1];
+  const saturation = sliders[2];
+
+  colorizeSliders(color, hue, brightness, saturation);
 }
 
 //resets the slider input to the corresponding value
@@ -229,6 +236,156 @@ function hidePopup() {
   const popupBox = copyContainer.children[0];
   copyContainer.classList.remove("active");
   popupBox.classList.remove("active");
+}
+
+//THE BELOW SECTION IS FOR IMPLEMENTING THE SAVE PALETTE FEATURE
+const saveBtn = document.querySelector(".save");
+const submitSave = document.querySelector(".submit-save");
+const closeSaveBtn = document.querySelector(".close-save");
+const saveContainer = document.querySelector(".save-container");
+const saveInput = document.querySelector(".save-popup input");
+const libraryContainer = document.querySelector(".library-container");
+const closeLibraryBtn = document.querySelector(".close-library");
+const libraryBtn = document.querySelector(".library");
+
+let savedPalettes = [];
+let localPalettes;
+
+saveBtn.addEventListener("click", openSavePalette);
+closeSaveBtn.addEventListener("click", closeSavePalette);
+submitSave.addEventListener("click", savePalette);
+
+libraryBtn.addEventListener("click", openLibraryPalette);
+closeLibraryBtn.addEventListener("click", closeLibraryPalette);
+
+function openSavePalette(e) {
+  const popup = saveContainer.children[0];
+  saveContainer.classList.add("active");
+  popup.classList.add("active");
+  //Set popup background to linear gradient of palette colors
+  popup.style.backgroundImage = `linear-gradient(to right, ${hexColors[0].innerText} 10%, ${hexColors[1].innerText} 30%, ${hexColors[2].innerText} 50%, ${hexColors[3].innerText} 70%, ${hexColors[4].innerText} 90%)`;
+}
+
+function closeSavePalette(e) {
+  const popup = saveContainer.children[0];
+  saveContainer.classList.remove("active");
+  popup.classList.remove("active");
+}
+
+function savePalette(e) {
+  const paletteName = saveInput.value;
+  const colors = [];
+  hexColors.forEach((hexColor) => {
+    colors.push(hexColor.innerText);
+  });
+
+  //Generate the palette object to be saved
+  //push to saved palettes array
+  //first check if there are any palettes in localStorage
+  //then sets a palette number for a unique identifier
+  let paletteNum;
+  const localStoragePalettes = JSON.parse(localStorage.getItem("palettes"));
+  if (localStoragePalettes) {
+    paletteNum = localStoragePalettes.length;
+  } else {
+    paletteNum = savedPalettes.length;
+  }
+  const paletteObj = { paletteName, colors, nr: paletteNum };
+  savedPalettes.push(paletteObj);
+
+  //Save to local storage
+  saveToLocalStorage(paletteObj);
+  saveInput.value = "";
+  closeSavePalette(e);
+}
+
+function saveToLocalStorage(obj) {
+  //check if LS storage already has palettes, if not
+  //create an empty array
+  if (localStorage.getItem("palettes") === null) {
+    localPalettes = [];
+  } else {
+    //if there are palettes, we parse the LS JSON data
+    localPalettes = JSON.parse(localStorage.getItem("palettes"));
+  }
+
+  //after checking, we are pushing and saving the current palette
+  localPalettes.push(obj);
+  localStorage.setItem("palettes", JSON.stringify(localPalettes));
+}
+
+function getLocalPalettes() {
+  if (localStorage.getItem("palettes") === null) {
+    localPalettes = [];
+  } else {
+    const localPalettes = JSON.parse(localStorage.getItem("palettes"));
+    localPalettes.forEach((palette) => {
+      //append the saved palette to the library
+      const savedPalette = renderSavedPalette(palette);
+      const savedPalettesDiv = document.querySelector(".saved-palettes");
+      savedPalettesDiv.appendChild(savedPalette);
+    });
+  }
+}
+
+function openLibraryPalette(e) {
+  const popup = libraryContainer.children[0];
+  libraryContainer.classList.add("active");
+  popup.classList.add("active");
+  getLocalPalettes();
+}
+
+function closeLibraryPalette() {
+  const popup = libraryContainer.children[0];
+  libraryContainer.classList.remove("active");
+  popup.classList.remove("active");
+  const savedPalettesDiv = document.querySelector(".saved-palettes");
+  savedPalettesDiv.innerText = "";
+}
+
+//this renders a 'preview' of a saved palette
+//this div displays in the library popup
+function renderSavedPalette(obj) {
+  const paletteContainer = document.createElement("div");
+  paletteContainer.classList.add("saved-palette");
+
+  const title = document.createElement("h4");
+  title.innerText = obj.paletteName;
+
+  const preview = document.createElement("div");
+  preview.classList.add("small-preview");
+  obj.colors.forEach((color) => {
+    const smallDiv = document.createElement("div");
+    smallDiv.style.backgroundColor = color;
+    preview.appendChild(smallDiv);
+  });
+
+  const selectBtn = document.createElement("button");
+  selectBtn.classList.add("select-palette-btn");
+  selectBtn.classList.add(obj.nr);
+  selectBtn.innerText = "Select";
+
+  selectBtn.addEventListener("click", (e) => {
+    closeLibraryPalette();
+    const paletteIndex = e.target.classList[1];
+
+    initialColors = [];
+    obj.colors.forEach((color, index) => {
+      initialColors.push(color);
+      colors[index].style.backgroundColor = color;
+      const text = colors[index].children[0];
+      checkContrast(color, text);
+      updateHexText(index);
+    });
+
+    resetInputs();
+  });
+
+  paletteContainer.appendChild(title);
+  paletteContainer.appendChild(preview);
+  paletteContainer.appendChild(selectBtn);
+
+  return paletteContainer;
 }
 
 //Calling the function sets the initial palette
