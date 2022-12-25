@@ -297,11 +297,6 @@ function savePalette(e) {
   saveToLocalStorage(paletteObj);
   saveInput.value = "";
   closeSavePalette(e);
-
-  // //append the saved palette to the library
-  // const savedPalette = renderSavedPalette(paletteObj);
-  // const savedPalettesDiv = document.querySelector(".saved-palettes");
-  // savedPalettesDiv.appendChild(savedPalette);
 }
 
 function saveToLocalStorage(obj) {
@@ -317,11 +312,6 @@ function saveToLocalStorage(obj) {
   //after checking, we are pushing and saving the current palette
   localPalettes.push(obj);
   localStorage.setItem("palettes", JSON.stringify(localPalettes));
-
-  // //append the saved palette to the library
-  // const savedPalette = renderSavedPalette(obj);
-  // const savedPalettesDiv = document.querySelector(".saved-palettes");
-  // savedPalettesDiv.appendChild(savedPalette);
 }
 
 function getLocalPalettes() {
@@ -329,7 +319,6 @@ function getLocalPalettes() {
     localPalettes = [];
   } else {
     const localPalettes = JSON.parse(localStorage.getItem("palettes"));
-    console.log("localPalettes", localPalettes);
     localPalettes.forEach((palette) => {
       //append the saved palette to the library
       const savedPalette = renderSavedPalette(palette);
