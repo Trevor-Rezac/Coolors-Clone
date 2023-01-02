@@ -81,12 +81,7 @@ function randomizePalette() {
     checkContrast(randomHexColor, hexText);
 
     for (icon of icons) {
-      if (hexText.style.color === "white") {
-        icon.style.color = "white";
-      }
-      if (hexText.style.color === "black") {
-        icon.style.color = "black";
-      }
+      checkContrast(randomHexColor, icon);
     }
 
     //Set color sliders
@@ -254,6 +249,7 @@ let localPalettes;
 saveBtn.addEventListener("click", openSavePalette);
 closeSaveBtn.addEventListener("click", closeSavePalette);
 submitSave.addEventListener("click", savePalette);
+saveContainer.addEventListener("click", closeSavePalette);
 
 libraryBtn.addEventListener("click", openLibraryPalette);
 closeLibraryBtn.addEventListener("click", closeLibraryPalette);
