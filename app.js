@@ -242,6 +242,7 @@ const saveInput = document.querySelector(".save-popup input");
 const libraryContainer = document.querySelector(".library-container");
 const closeLibraryBtn = document.querySelector(".close-library");
 const libraryBtn = document.querySelector(".library");
+console.log("saveContainer", saveContainer);
 
 let savedPalettes = [];
 let localPalettes;
@@ -264,9 +265,13 @@ function openSavePalette(e) {
 }
 
 function closeSavePalette(e) {
-  const popup = saveContainer.children[0];
-  saveContainer.classList.remove("active");
-  popup.classList.remove("active");
+  if (e.target.nodeName === "INPUT") {
+    return;
+  } else {
+    const popup = saveContainer.children[0];
+    saveContainer.classList.remove("active");
+    popup.classList.remove("active");
+  }
 }
 
 function savePalette(e) {
