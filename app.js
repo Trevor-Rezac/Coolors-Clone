@@ -253,6 +253,7 @@ saveContainer.addEventListener("click", closeSavePalette);
 
 libraryBtn.addEventListener("click", openLibraryPalette);
 closeLibraryBtn.addEventListener("click", closeLibraryPalette);
+libraryContainer.addEventListener("click", closeLibraryPalette);
 
 function openSavePalette(e) {
   const popup = saveContainer.children[0];
