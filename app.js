@@ -265,7 +265,6 @@ function openSavePalette(e) {
 }
 
 function closeSavePalette(e) {
-  console.log("e", e);
   if (e.target.nodeName === "INPUT") {
     return;
   } else {
